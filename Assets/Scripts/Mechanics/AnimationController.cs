@@ -48,6 +48,24 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
+            fool();
+
+            dee();
+
+            animator.SetBool("grounded", IsGrounded);
+            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
+
+            targetVelocity = move * maxSpeed;
+        }
+        public void hoo()
+        {
+            if (velocity.y > 0)
+            {
+                velocity.y = velocity.y * model.jumpDeceleration;
+            }
+        }
+        public void fool()
+        {
             if (jump && IsGrounded)
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
@@ -56,21 +74,15 @@ namespace Platformer.Mechanics
             else if (stopJump)
             {
                 stopJump = false;
-                if (velocity.y > 0)
-                {
-                    velocity.y = velocity.y * model.jumpDeceleration;
-                }
+                hoo();
             }
-
+        }
+        public void dee()
+        {
             if (move.x > 0.01f)
                 spriteRenderer.flipX = false;
             else if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
-
-            animator.SetBool("grounded", IsGrounded);
-            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
-
-            targetVelocity = move * maxSpeed;
         }
     }
 }
