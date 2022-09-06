@@ -47,6 +47,11 @@ namespace Platformer.Core
             T item;
             var last = items[items.Count - 1];
             items.RemoveAt(items.Count - 1);
+            A();
+
+            return item;
+        }
+        public void A(){
             if (items.Count > 0)
             {
                 item = items[0];
@@ -54,12 +59,8 @@ namespace Platformer.Core
                 SiftUp();
             }
             else
-            {
                 item = last;
-            }
-            return item;
         }
-
 
         int Compare(T A, T B) => A.CompareTo(B);
 
