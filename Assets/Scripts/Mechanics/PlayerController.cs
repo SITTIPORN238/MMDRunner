@@ -53,25 +53,32 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
+            du();
+            UpdateJumpState();
+            base.Update();
+        }
+        public void du()
+        {
             if (controlEnabled)
             {
                 move.x = Input.GetAxis("Horizontal");
-                if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
-                    jumpState = JumpState.PrepareToJump;
-                else if (Input.GetButtonUp("Jump"))
-                {
-                    stopJump = true;
-                    Schedule<PlayerStopJump>().player = this;
-                }
+                pub();
             }
             else
             {
                 move.x = 0;
             }
-            UpdateJumpState();
-            base.Update();
         }
-
+        public void pub()
+        {
+            if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+                jumpState = JumpState.PrepareToJump;
+            else if (Input.GetButtonUp("Jump"))
+            {
+                stopJump = true;
+                Schedule<PlayerStopJump>().player = this;
+            }
+        }
         void UpdateJumpState()
         {
             jump = false;
@@ -104,6 +111,24 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
+            yo();
+
+            tem();
+
+            animator.SetBool("grounded", IsGrounded);
+            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
+
+            targetVelocity = move * maxSpeed;
+        }
+        public void foce()
+        {
+            if (velocity.y > 0)
+            {
+                velocity.y = velocity.y * model.jumpDeceleration;
+            }
+        }
+        public void yo()
+        {
             if (jump && IsGrounded)
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
@@ -112,21 +137,15 @@ namespace Platformer.Mechanics
             else if (stopJump)
             {
                 stopJump = false;
-                if (velocity.y > 0)
-                {
-                    velocity.y = velocity.y * model.jumpDeceleration;
-                }
+                foce();
             }
-
+        }
+        public void tem()
+        {
             if (move.x > 0.01f)
                 spriteRenderer.flipX = false;
             else if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
-
-            animator.SetBool("grounded", IsGrounded);
-            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
-
-            targetVelocity = move * maxSpeed;
         }
 
         public enum JumpState
