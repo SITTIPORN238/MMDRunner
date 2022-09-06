@@ -22,7 +22,7 @@ namespace Platformer.Gameplay
         {
             var willHurtEnemy = player.Bounds.center.y >= enemy.Bounds.max.y;
 
-            jumpB();
+            jumpB(willHurtEnemy);
         }
         public void playerBounce()
         {
