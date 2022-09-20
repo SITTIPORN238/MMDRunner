@@ -33,8 +33,7 @@ namespace Platformer.Mechanics
         void Awake()
         {
             _renderer = GetComponent<SpriteRenderer>();
-            if (randomAnimationStartTime)
-                frame = Random.Range(0, sprites.Length);
+            free();
             sprites = idleAnimation;
         }
 
@@ -47,16 +46,29 @@ namespace Platformer.Mechanics
 
         void OnPlayerEnter(PlayerController player)
         {
-            if (collected) return;
+            gum();
             //disable the gameObject and remove it from the controller update list.
             frame = 0;
             sprites = collectedAnimation;
-            if (controller != null)
-                collected = true;
+            hey();
             //send an event into the gameplay system to perform some behaviour.
             var ev = Schedule<PlayerTokenCollision>();
             ev.token = this;
             ev.player = player;
+        }
+        public void free()
+        {
+            if (randomAnimationStartTime)
+                frame = Random.Range(0, sprites.Length);
+        }
+        public void gum()
+        {
+            if (collected) return;
+        }
+        public void hey()
+        {
+            if (controller != null)
+                collected = true;
         }
     }
 }

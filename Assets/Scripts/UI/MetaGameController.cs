@@ -44,21 +44,29 @@ namespace Platformer.UI
             }
         }
 
+       void setGameSpeed(int time)
+        {
+            Time.timeScale = time;
+        }
+
         void _ToggleMainMenu(bool show)
         {
             if (show)
             {
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
+                setGameSpeed(0);
                 mainMenu.gameObject.SetActive(true);
                 foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(false);
             }
             else
             {
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
+                setGameSpeed(1);
                 mainMenu.gameObject.SetActive(false);
                 foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(true);
             }
             this.showMainCanvas = show;
+            
         }
 
         void Update()

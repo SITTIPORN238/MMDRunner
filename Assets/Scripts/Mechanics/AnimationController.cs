@@ -48,14 +48,21 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
+<<<<<<< HEAD
             come();
 
             go();
+=======
+            checkJumpAndIsGrounded();
+
+            setFlipXFalse();
+>>>>>>> Sumlee
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
+<<<<<<< HEAD
         }
         public void Run()
         {
@@ -83,6 +90,63 @@ namespace Platformer.Mechanics
             {
                 stopJump = false;
                 Run();
+            }
+=======
+>>>>>>> Sumlee
+        }
+        public void setVelocityY()
+        {
+            if (velocity.y > 0)
+            {
+                velocity.y = velocity.y * model.jumpDeceleration;
+            }
+        }
+        public void checkJumpAndIsGrounded()
+        {
+            if (jump && IsGrounded)
+            {
+                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                jump = false;
+                
+            }
+
+            StopJump();
+        }
+        public void StopJump()
+        {
+            if (stopJump)
+            {
+                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                jump = false;
+                return;
+            }
+            setStopJumpFalse();
+        }
+        public void setStopJumpFalse()
+        {
+            if (stopJump)
+            {
+                stopJump = false;
+
+                setVelocityY();
+            }
+        }
+        public void setFlipXFalse()
+        {
+            if (move.x > 0.01f)
+            {
+                spriteRenderer.flipX = false;
+                return;
+            }
+
+            setFlipXTrue();
+                
+        }
+        public void setFlipXTrue()
+        {
+            if (move.x < -0.01f)
+            {
+                spriteRenderer.flipX = true;
             }
         }
     }

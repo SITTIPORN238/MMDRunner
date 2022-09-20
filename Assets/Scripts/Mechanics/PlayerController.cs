@@ -21,11 +21,11 @@ namespace Platformer.Mechanics
         /// <summary>
         /// Max horizontal speed of the player.
         /// </summary>
-        public float maxSpeed = 7;
+        public float maxSpeed = 9;
         /// <summary>
         /// Initial jump velocity at the start of a jump.
         /// </summary>
-        public float jumpTakeOffSpeed = 7;
+        public float jumpTakeOffSpeed = 8;
 
         public JumpState jumpState = JumpState.Grounded;
         private bool stopJump;
@@ -108,8 +108,9 @@ namespace Platformer.Mechanics
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
                 jump = false;
+                return;
             }
-            else if (stopJump)
+            if (stopJump)
             {
                 stopJump = false;
                 if (velocity.y > 0)
@@ -119,8 +120,12 @@ namespace Platformer.Mechanics
             }
 
             if (move.x > 0.01f)
+            {
                 spriteRenderer.flipX = false;
-            else if (move.x < -0.01f)
+                return;
+            }
+            
+            if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
 
             animator.SetBool("grounded", IsGrounded);
