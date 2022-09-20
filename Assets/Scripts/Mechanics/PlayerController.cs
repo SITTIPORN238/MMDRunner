@@ -108,8 +108,9 @@ namespace Platformer.Mechanics
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
                 jump = false;
+                return;
             }
-            else if (stopJump)
+            if (stopJump)
             {
                 stopJump = false;
                 if (velocity.y > 0)
@@ -119,8 +120,12 @@ namespace Platformer.Mechanics
             }
 
             if (move.x > 0.01f)
+            {
                 spriteRenderer.flipX = false;
-            else if (move.x < -0.01f)
+                return;
+            }
+            
+            if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
 
             animator.SetBool("grounded", IsGrounded);
