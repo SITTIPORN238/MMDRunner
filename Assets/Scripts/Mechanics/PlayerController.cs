@@ -53,27 +53,37 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
-            du();
+            setWalk();
             UpdateJumpState();
             base.Update();
         }
-        public void du()
+        public void setWalk()
         {
             if (controlEnabled)
             {
                 move.x = Input.GetAxis("Horizontal");
-                pub();
+                setJumpState();
+                return;
             }
-            else
-            {
+            
+           
                 move.x = 0;
-            }
+            
         }
-        public void pub()
+        public void setJumpState()
         {
             if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+               
+            {
                 jumpState = JumpState.PrepareToJump;
-            else if (Input.GetButtonUp("Jump"))
+                return;
+            }
+
+            setStopJumpTrue();
+        }
+        public void setStopJumpTrue()
+        {
+            if (Input.GetButtonUp("Jump"))
             {
                 stopJump = true;
                 Schedule<PlayerStopJump>().player = this;
@@ -111,43 +121,55 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
-            yo();
+            setJumpFalse();
 
-            tem();
+            setFlipXFalse();
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
         }
-        public void foce()
+        public void setVelocityY()
         {
             if (velocity.y > 0)
             {
                 velocity.y = velocity.y * model.jumpDeceleration;
             }
         }
-        public void yo()
+        public void setJumpFalse()
         {
             if (jump && IsGrounded)
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
                 jump = false;
+                return;
             }
-            else if (stopJump)
+            setStopJumpFalse();
+        }
+        public void setStopJumpFalse()
+        {
+            if (stopJump)
             {
                 stopJump = false;
-                foce();
+                setVelocityY();
             }
         }
-        public void tem()
+        public void setFlipXFalse()
         {
             if (move.x > 0.01f)
+            {
                 spriteRenderer.flipX = false;
-            else if (move.x < -0.01f)
+                return;
+            }
+
+            setFlipXTrue();
+        }
+        public void setFlipXTrue()
+        {
+            if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
         }
-
         public enum JumpState
         {
             Grounded,
