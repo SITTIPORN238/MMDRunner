@@ -29,12 +29,12 @@ namespace Platformer.Mechanics
         /// <summary>
         /// Set to true to initiate a jump.
         /// </summary>
-        public bool jump;
+        public bool IsJump;
 
         /// <summary>
         /// Set to true to set the current jump velocity to zero.
         /// </summary>
-        public bool stopJump;
+        public bool IsStopJump;
 
         SpriteRenderer spriteRenderer;
         Animator animator;
@@ -61,40 +61,60 @@ namespace Platformer.Mechanics
         }
         public void setJumpFalse()
         {
-            if (jump && IsGrounded)
+            if (IsJumpEqualIsGrounded())
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
                 jump = false;
                 return;
             }
         }
+        bool IsJumpEqualIsGrounded()
+        {
+            return jump && IsGrounded;
+        }
         public void setFlipXFalse()
         {
-            if (move.x > 0.01f)
+            if (IsMoveXMorethan001f())
             {
                 spriteRenderer.flipX = false;
                 return;
             }
         }
+        bool IsMoveXMorethan001f()
+        {
+            return move.x > 0.01f;
+        }
         public void setFlipxTrue()
         {
-            if (move.x < -0.01f)
+            if (IsMoveXLessthanNegative001f())
                 spriteRenderer.flipX = true;
+        }
+        bool IsMoveXLessthanNegative001f()
+        {
+            return move.x < -0.01f;
         }
         public void setVelocityY()
         {
-            if (velocity.y > 0)
+            if (IsVelocityYMorethan0())
             {
                 velocity.y = velocity.y * model.jumpDeceleration;
             }
         }
+        bool IsVelocityYMorethan0()
+        {
+            return velocity.y > 0;
+        }
         public void setStopJumpFalse()
         {
-            if (stopJump)
+            if (IsStopJump())
             {
                 stopJump = false;
                 setVelocityY();
             }
+        }
+        bool IsStopJump()
+        {
+            return stopJump;
         }
     }
 }
