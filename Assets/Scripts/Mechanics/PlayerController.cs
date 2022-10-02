@@ -28,13 +28,13 @@ namespace Platformer.Mechanics
         public float jumpTakeOffSpeed = 7;
 
         public JumpState jumpState = JumpState.Grounded;
-        private bool stopJump;
+        private bool StopJump;
         /*internal new*/ public Collider2D collider2d;
         /*internal new*/ public AudioSource audioSource;
         public Health health;
         public bool controlEnabled = true;
 
-        bool jump;
+        bool Jump;
         Vector2 move;
         SpriteRenderer spriteRenderer;
         internal Animator animator;
@@ -72,7 +72,7 @@ namespace Platformer.Mechanics
         }
         public void setJumpState()
         {
-            if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+            if (IsJumpStateEqualGroundedAndGetInputButtonDownJump())
                
             {
                 jumpState = JumpState.PrepareToJump;
@@ -81,23 +81,27 @@ namespace Platformer.Mechanics
 
             setStopJumpTrue();
         }
+        bool IsJumpStateEqualGroundedAndGetInputButtonDownJump()
+        {
+            return jumpState == JumpState.Grounded && Input.GetButtonDown("Jump");
+        }
         public void setStopJumpTrue()
         {
             if (Input.GetButtonUp("Jump"))
             {
-                stopJump = true;
+                StopJump = true;
                 Schedule<PlayerStopJump>().player = this;
             }
         }
         void UpdateJumpState()
         {
-            jump = false;
+            Jump = false;
             switch (jumpState)
             {
                 case JumpState.PrepareToJump:
                     jumpState = JumpState.Jumping;
-                    jump = true;
-                    stopJump = false;
+                    Jump = true;
+                    StopJump = false;
                     break;
                 case JumpState.Jumping:
                     if (!IsGrounded)
@@ -132,32 +136,40 @@ namespace Platformer.Mechanics
         }
         public void setVelocityY()
         {
-            if (velocity.y > 0)
+            if (VelocityYMorethan0())
             {
                 velocity.y = velocity.y * model.jumpDeceleration;
             }
         }
+        bool VelocityYMorethan0()
+        {
+            return velocity.y > 0;
+        }
         public void setJumpFalse()
         {
-            if (jump && IsGrounded)
+            if (Is_IsJumpEqualIsGrounded())
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
-                jump = false;
+                Jump = false;
                 return;
             }
             setStopJumpFalse();
         }
+        bool Is_IsJumpEqualIsGrounded()
+        {
+            return Jump && IsGrounded;
+        }
         public void setStopJumpFalse()
         {
-            if (stopJump)
+            if (StopJump)
             {
-                stopJump = false;
+                StopJump = false;
                 setVelocityY();
             }
         }
         public void setFlipXFalse()
         {
-            if (move.x > 0.01f)
+            if (IsMoveXMorethan001f())
             {
                 spriteRenderer.flipX = false;
                 return;
@@ -165,10 +177,18 @@ namespace Platformer.Mechanics
 
             setFlipXTrue();
         }
+        bool IsMoveXMorethan001f()
+        {
+            return move.x > 0.01f;
+        }
         public void setFlipXTrue()
         {
-            if (move.x < -0.01f)
+            if (IsMoveXLessthanNegative001f())
                 spriteRenderer.flipX = true;
+        }
+        bool IsMoveXLessthanNegative001f()
+        {
+            return move.x < -0.01f;
         }
         public enum JumpState
         {
