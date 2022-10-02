@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Platformer.Core;
 using Platformer.Model;
 using UnityEngine;
-
+using DG.Tweening;
 namespace Platformer.Mechanics
 {
     /// <summary>
@@ -63,7 +63,8 @@ namespace Platformer.Mechanics
         {
             if (IsJumpEqualIsGrounded())
             {
-                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                transform.DOJump(new Vector3(5, 0, 0), 1, 1, 1, false);
+                //velocity.y = jumpTakeOffSpeed * model.jumpModifier;
                 IsJump = false;
                 return;
             }
