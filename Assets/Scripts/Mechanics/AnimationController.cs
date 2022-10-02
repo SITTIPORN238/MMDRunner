@@ -64,13 +64,13 @@ namespace Platformer.Mechanics
             if (IsJumpEqualIsGrounded())
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
-                jump = false;
+                IsJump = false;
                 return;
             }
         }
         bool IsJumpEqualIsGrounded()
         {
-            return jump && IsGrounded;
+            return IsJump && IsGrounded;
         }
         public void setFlipXFalse()
         {
@@ -106,15 +106,15 @@ namespace Platformer.Mechanics
         }
         public void setStopJumpFalse()
         {
-            if (IsStopJump())
+            if (Is_StopJump())
             {
-                stopJump = false;
+                IsStopJump = false;
                 setVelocityY();
             }
         }
-        bool IsStopJump()
+        bool Is_StopJump()
         {
-            return stopJump;
+            return IsStopJump;
         }
     }
 }
