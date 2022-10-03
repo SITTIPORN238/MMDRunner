@@ -22,11 +22,11 @@ namespace Platformer.Core
 
             public abstract void Execute();
 
-            public virtual bool Precondition() => true;
+            public virtual bool IsPrecondition() => true;
 
             internal virtual void ExecuteEvent()
             {
-                if (Precondition())
+                if (IsPrecondition())
                     Execute();
             }
 
@@ -52,7 +52,7 @@ namespace Platformer.Core
 
             internal override void ExecuteEvent()
             {
-                if (Precondition())
+                if (IsPrecondition())
                 {
                     Execute();
                     OnExecute?.Invoke((T)this);
