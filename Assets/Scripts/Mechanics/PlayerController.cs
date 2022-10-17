@@ -33,7 +33,7 @@ namespace Platformer.Mechanics
         /*internal new*/ public AudioSource audioSource;
         public Health health;
         public bool controlEnabled = true;
-
+        [SerializeField] inputChecker inputchecker;
         bool Jump;
         Vector2 move;
         SpriteRenderer spriteRenderer;
@@ -87,7 +87,7 @@ namespace Platformer.Mechanics
         }
         public void setStopJumpTrue()
         {
-            if (Input.GetButtonUp("Jump"))
+            if (inputchecker.input())
             {
                 StopJump = true;
                 Schedule<PlayerStopJump>().player = this;
