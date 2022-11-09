@@ -28,13 +28,13 @@ namespace Platformer.Mechanics
         public float jumpTakeOffSpeed = 8;
 
         public JumpState jumpState = JumpState.Grounded;
-        private bool stopJump;
+        private bool StopJump;
         /*internal new*/ public Collider2D collider2d;
         /*internal new*/ public AudioSource audioSource;
         public Health health;
         public bool controlEnabled = true;
-
-        bool jump;
+        [SerializeField] inputChecker inputchecker;
+        bool Jump;
         Vector2 move;
         SpriteRenderer spriteRenderer;
         internal Animator animator;
@@ -53,34 +53,55 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
-            if (controlEnabled)
-            {
-                move.x = Input.GetAxis("Horizontal");
-                if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
-                    jumpState = JumpState.PrepareToJump;
-                else if (Input.GetButtonUp("Jump"))
-                {
-                    stopJump = true;
-                    Schedule<PlayerStopJump>().player = this;
-                }
-            }
-            else
-            {
-                move.x = 0;
-            }
+            setWalk();
             UpdateJumpState();
             base.Update();
         }
+        public void setWalk()
+        {
+            if (controlEnabled)
+            {
+                move.x = Input.GetAxis("Horizontal");
+                setJumpState();
+                return;
+            }
+            
+           
+                move.x = 0;
+            
+        }
+        public void setJumpState()
+        {
+            if (IsJumpStateEqualGroundedAndGetInputButtonDownJump())
+               
+            {
+                jumpState = JumpState.PrepareToJump;
+                return;
+            }
 
+            setStopJumpTrue();
+        }
+        bool IsJumpStateEqualGroundedAndGetInputButtonDownJump()
+        {
+            return jumpState == JumpState.Grounded && Input.GetButtonDown("Jump");
+        }
+        public void setStopJumpTrue()
+        {
+            if (inputchecker.input())
+            {
+                StopJump = true;
+                Schedule<PlayerStopJump>().player = this;
+            }
+        }
         void UpdateJumpState()
         {
-            jump = false;
+            Jump = false;
             switch (jumpState)
             {
                 case JumpState.PrepareToJump:
                     jumpState = JumpState.Jumping;
-                    jump = true;
-                    stopJump = false;
+                    Jump = true;
+                    StopJump = false;
                     break;
                 case JumpState.Jumping:
                     if (!IsGrounded)
@@ -104,6 +125,7 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
+<<<<<<< HEAD
             if (jump && IsGrounded)
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
@@ -127,13 +149,73 @@ namespace Platformer.Mechanics
             
             if (move.x < -0.01f)
                 spriteRenderer.flipX = true;
+=======
+            setJumpFalse();
+
+            setFlipXFalse();
+>>>>>>> origin/master
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
         }
+        public void setVelocityY()
+        {
+            if (VelocityYMorethan0())
+            {
+                velocity.y = velocity.y * model.jumpDeceleration;
+            }
+        }
+        bool VelocityYMorethan0()
+        {
+            return velocity.y > 0;
+        }
+        public void setJumpFalse()
+        {
+            if (Is_IsJumpEqualIsGrounded())
+            {
+                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                Jump = false;
+                return;
+            }
+            setStopJumpFalse();
+        }
+        bool Is_IsJumpEqualIsGrounded()
+        {
+            return Jump && IsGrounded;
+        }
+        public void setStopJumpFalse()
+        {
+            if (StopJump)
+            {
+                StopJump = false;
+                setVelocityY();
+            }
+        }
+        public void setFlipXFalse()
+        {
+            if (IsMoveXMorethan001f())
+            {
+                spriteRenderer.flipX = false;
+                return;
+            }
 
+            setFlipXTrue();
+        }
+        bool IsMoveXMorethan001f()
+        {
+            return move.x > 0.01f;
+        }
+        public void setFlipXTrue()
+        {
+            if (IsMoveXLessthanNegative001f())
+                spriteRenderer.flipX = true;
+        }
+        bool IsMoveXLessthanNegative001f()
+        {
+            return move.x < -0.01f;
+        }
         public enum JumpState
         {
             Grounded,

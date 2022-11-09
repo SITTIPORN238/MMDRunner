@@ -31,23 +31,38 @@ namespace Platformer.Gameplay
                     if (!enemyHealth.IsAlive)
                     {
                         Schedule<EnemyDeath>().enemy = enemy;
+<<<<<<< HEAD
                         player.Bounce(3);
                     }
                     else
                     {
                         player.Bounce(10);
                     }
+=======
+                        player.Bounce(2);
+                        return;
+                    }
+                    
+                    
+                        player.Bounce(7);
+                    return;  
+>>>>>>> origin/master
                 }
-                else
-                {
+                
+              
                     Schedule<EnemyDeath>().enemy = enemy;
+<<<<<<< HEAD
                     player.Bounce(3);
                 }
+=======
+                    player.Bounce(2);
+                return;  
+>>>>>>> origin/master
             }
-            else
-            {
+           
+           
                 Schedule<PlayerDeath>();
-            }
+           
         }
     }
 }

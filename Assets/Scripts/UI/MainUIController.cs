@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Platformer.UI
 {
@@ -24,6 +25,7 @@ namespace Platformer.UI
         void OnEnable()
         {
             SetActivePanel(0);
+            transform.DOFlip();
         }
     }
 }
